@@ -1,4 +1,6 @@
 import hashlib
+import os
+import sqlite3
 
 def createTable(conn):
 	print("Creating file table")
