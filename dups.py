@@ -49,7 +49,7 @@ if args.scan:
     sys.exit(0)
 
 if args.delete:
-    for i in range(0,1000):
+    for i in range(0,10000000):
         print("Start iteration %d" % i)
         changes = deleteDups(conn)
         if changes == 0:
