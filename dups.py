@@ -6,6 +6,7 @@ import os.path
 import sqlite3
 import sys
 from db import db
+from file import file
 
 def printDups(conn, limit):
     res = db.fetchExactDuplicates(conn, limit)
@@ -30,6 +31,7 @@ parser = argparse.ArgumentParser(description='Remove duplicate records.')
 parser.add_argument('--scan', action='store_true', help='print duplicate records')
 parser.add_argument('--delete', action='store_true', help='remove duplicate records')
 parser.add_argument('--dups', action='store_true', help='list files with duplicate hashes')
+parser.add_argument('--clean_dups', action='store_true', help='removes duplicate files.  Keeps the file with the shortesst name')
 args = parser.parse_args()
 
 print("WELCOME TO DUPS")
@@ -58,6 +60,13 @@ if args.delete:
         if i % 5 == 0:
             conn.commit()
     conn.commit()
+    sys.exit(0)
+
+if args.clean_dups:
+    dups = db.findDuplicateHashes(conn, 10, 10)
+    for dup in dups:
+        f_dups = db.fetchFilesByHash(conn, dup)
+        file.keepShortest(f_dups)
     sys.exit(0)
 
 if args.dups:

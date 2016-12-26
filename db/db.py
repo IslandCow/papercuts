@@ -13,6 +13,10 @@ class FileRecord:
         self.size = size
         self.date_created = date_created
         self.date_modified = date_modified
+    
+    def __str__(self):
+       joiner = "|"
+       return joiner.join((str(self.key), self.file_name, self.abs_path))
 
 def fileFromResult(result):
     return FileRecord(result['id'], result['absolute_path'], result['md5_sum'], result['parent_dir'], result['file_name'], 
