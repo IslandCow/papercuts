@@ -27,6 +27,11 @@ def countFiles(conn):
     c.execute('''SELECT COUNT(id) FROM file''')
     return c.fetchone()
 
+def allFileNames(conn):
+    c = conn.cursor()
+    c.execute('''SELECT id, absolute_path FROM file''')
+    return c.fetchall()
+
 def fetchFileById(conn, key):
     c = conn.cursor()
     c.execute('''SELECT id, absolute_path, md5_sum, parent_dir, file_name, extension, file_size, date_created, date_modified FROM file WHERE id=?''', (key,))

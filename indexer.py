@@ -25,14 +25,10 @@ def processFile(path):
 
 def walk(path):
     for root, dirs, files in os.walk(path):
-        for f in files:
-            processFile(os.path.join(root, f))
-
         msg = 'Processed files in {}'.format(root)
         print(msg)
-        for d in dirs:
-            walk(os.path.join(root, d))
-
+        for f in files:
+            processFile(os.path.join(root, f))
         msg = 'Finished processing directories for {}'.format(root)
         print(msg)
 

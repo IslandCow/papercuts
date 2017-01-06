@@ -32,6 +32,7 @@ parser.add_argument('--scan', action='store_true', help='print duplicate records
 parser.add_argument('--delete', action='store_true', help='remove duplicate records')
 parser.add_argument('--dups', action='store_true', help='list files with duplicate hashes')
 parser.add_argument('--clean_dups', action='store_true', help='removes duplicate files.  Keeps the file with the shortesst name')
+parser.add_argument('--clean', action='store_true')
 args = parser.parse_args()
 
 print("WELCOME TO DUPS")
@@ -62,11 +63,23 @@ if args.delete:
     conn.commit()
     sys.exit(0)
 
+if args.clean:
+    all_files = db.allFileNames(conn)
+    deleted_files = list()
+    for f in all_files:
+      if not os.path.exists(f[1]):
+        print("Remove record %s" % f[0])
+        deleted_files.append(f[0])
+    db.deleteFiles(conn, deleted_files)
+    conn.commit()
+    sys.exit(0)
+
 if args.clean_dups:
-    dups = db.findDuplicateHashes(conn, 10, 10)
+    dups = db.findDuplicateHashes(conn, 10, 10000)
     for dup in dups:
         f_dups = db.fetchFilesByHash(conn, dup)
         file.keepShortest(f_dups)
+    print("WOO")
     sys.exit(0)
 
 if args.dups:
