@@ -12,13 +12,17 @@ def processFile(path):
         # do not process directories
         return
 
-    stats = db.readFile(path)
     f = os.path.split(path)
     parent_dir = os.path.split(f[0])[1]
     split_name = os.path.splitext(f[1])
     f_name = split_name[0]
     ext = split_name[1]
 
+    if db.checkForFile(conn, path):
+        print('File already processed %s' % f_name)
+        return
+
+    stats = db.readFile(path)
     print(stats)
 
     db.createFile(conn, path, parent_dir, f_name, ext, *stats)

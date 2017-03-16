@@ -83,6 +83,12 @@ def createTable(conn):
 	c.execute('''CREATE TABLE file (id integer primary key, absolute_path text, md5_sum text, parent_dir text, file_name text, extension text, file_size integer, date_created integer, date_modified integer)''')
 	conn.commit()
 
+def checkForFile(conn, file_name):
+	files = fetchFilesByFileName(conn, file_name)
+	print('Instances of file %s (%d)' % (file_name, len(files)))
+	return len(files) > 0
+
+
 def createFile(conn, path, p_dir, file_name, extension, md5, size, created, modified):
 	print("insert file %s" % (path))
 	c = conn.cursor()
